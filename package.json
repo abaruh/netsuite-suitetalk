@@ -1,11 +1,17 @@
 {
   "name": "netsuite-suitetalk",
-  "version": "1.0.0-85",
+  "version": "1.0.0-108",
   "description": "NetSuite SuiteTalk wrapper",
   "main": "server.js",
   "author": "Adam Baruh",
   "license": "ISC",
-  "dependencies": {
+  "keywords":
+  [
+      "netsuite",
+      "suitetalk"
+  ],
+  "dependencies":
+  {
     "soap": "^0.19.0"
   }
 }
