@@ -1,6 +1,6 @@
 {
   "name": "netsuite-suitetalk",
-  "version": "1.0.0-109",
+  "version": "1.0.0-110",
   "description": "NetSuite SuiteTalk wrapper",
   "main": "server.js",
   "author": "Adam Baruh",

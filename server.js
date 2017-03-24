@@ -1,5 +1,3 @@
-'use strict';
-
 const soap = require('soap');
 
 const logLevels =
