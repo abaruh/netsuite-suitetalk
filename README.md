@@ -57,7 +57,7 @@ Update any allowed NetSuite record by type, internalId, and fields.  Custom fiel
 
 __Arguments__
 
-* type (String): Type of Record (i.e. 'salesOrder', 'customer')
+* type (String): Type of Record (i.e. 'SalesOrder', 'Customer').  Note the different case than the get method.
 * internalId (String|Number): Internal Id of Record
 * fields (Hashtable): Table of name/value properties of fields to update
 * callback (Function): ```(err, resp)```
