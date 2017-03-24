@@ -1,3 +1,5 @@
+'use strict';
+
 const soap = require('soap');
 
 class NetSuite
