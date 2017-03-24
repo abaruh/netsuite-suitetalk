@@ -20,97 +20,97 @@ class NetSuite
         this.username = options.username;
         this.wsdlPath = options.wsdlPath || 'https://webservices.netsuite.com/wsdl/v2016_2_0/netsuite.wsdl';
     }
+}
 
-    initialize(callback)
+NetSuite.prototype.initialize = function(callback)
+{
+    soap.createClient(this.wsdlPath, {}, (err, client) =>
     {
-        soap.createClient(this.wsdlPath, {}, (err, client) =>
+        if (err)
         {
-            if (err)
-            {
-                console.log('Error: ' + err);
-                return;
-            }
+            console.log('Error: ' + err);
+            return;
+        }
 
-            client.addSoapHeader(
+        client.addSoapHeader(
+        {
+            applicationInfo:
             {
-                applicationInfo:
+                applicationId: this.appId
+            },
+            passport:
+            {
+                account: this.accountId,
+                email: this.username,
+                password: this.password,
+                role:
                 {
-                    applicationId: this.appId
-                },
-                passport:
-                {
-                    account: this.accountId,
-                    email: this.username,
-                    password: this.password,
-                    role:
+                    attributes:
                     {
-                        attributes:
-                        {
-                            internalId: this.roleId
-                        }
+                        internalId: this.roleId
                     }
                 }
-            });
-
-            client.setEndpoint(this.baseUrl);
-            this.client = client;
-            callback();
+            }
         });
+
+        client.setEndpoint(this.baseUrl);
+        this.client = client;
+        callback();
+    });
+};
+
+NetSuite.prototype.get = function(type, internalId, callback)
+{
+    let wrappedData =
+    {
+        ':record':
+        {
+            'attributes':
+            {
+                'xmlns:listRel': 'urn:relationships_2016_2.lists.webservices.netsuite.com',
+                'xmlns:platformCore': 'urn:core_2016_2.platform.webservices.netsuite.com',
+                'xsi:type': 'platformCore:RecordRef',
+                'type': type,
+                'internalId': internalId
+            }
+        }
     };
 
-    get(type, internalId, callback)
-    {
-        let wrappedData =
-        {
-            ':record':
-            {
-                'attributes':
-                {
-                    'xmlns:listRel': 'urn:relationships_2016_2.lists.webservices.netsuite.com',
-                    'xmlns:platformCore': 'urn:core_2016_2.platform.webservices.netsuite.com',
-                    'xsi:type': 'platformCore:RecordRef',
-                    'type': type,
-                    'internalId': internalId
-                }
-            }
-        };
+    this.client.get(wrappedData, callback);
+};
 
-        this.client.get(wrappedData, callback);
+NetSuite.prototype.update = function(type, internalId, fields, callback)
+{
+    let wrappedData =
+    {
+        ':record':
+        {
+            'attributes':
+            {
+                'xmlns:listRel': 'urn:relationships_2016_2.lists.webservices.netsuite.com',
+                'xmlns:platformCore': 'urn:core_2016_2.platform.webservices.netsuite.com',
+                'xsi:type': 'listRel:' + type,
+                'internalId': internalId
+            }
+        }
     };
 
-    update(type, internalId, fields, callback)
+    for (let property in fields)
     {
-        let wrappedData =
+        if (property === 'CustomFieldValues')
         {
-            ':record':
-            {
-                'attributes':
-                {
-                    'xmlns:listRel': 'urn:relationships_2016_2.lists.webservices.netsuite.com',
-                    'xmlns:platformCore': 'urn:core_2016_2.platform.webservices.netsuite.com',
-                    'xsi:type': 'listRel:' + type,
-                    'internalId': internalId
-                }
-            }
-        };
-
-        for (let property in fields)
-        {
-            if (property === 'CustomFieldValues')
-            {
-                for (let customFieldProperty in fields.CustomFieldValues)
-                {
-                    wrappedData[':record'].attributes['listRel:' + property] = fields[property];
-                }
-            }
-            else
+            for (let customFieldProperty in fields.CustomFieldValues)
             {
                 wrappedData[':record'].attributes['listRel:' + property] = fields[property];
             }
         }
+        else
+        {
+            wrappedData[':record'].attributes['listRel:' + property] = fields[property];
+        }
+    }
 
-        this.client.update(wrappedData, callback);
-    };
-}
+    this.client.update(wrappedData, callback);
+};
 
 module.exports = NetSuite;
