@@ -41,7 +41,7 @@ __Arguments__
 
 __Example__
 ```
-netSuiteClient.get('customer', '12345', function(err, data)
+netSuiteClient.get('customer', '12345', (err, data) =>
 {
     if (data && data.readResponse && data.readResponse.status && data.readResponse.status.attributes && data.readResponse.status.attributes.isSuccess)
     {
@@ -71,7 +71,7 @@ let fields =
     salutation: 'Mr.'
 };
 
-netSuiteClient.update('Customer', '12345', fields, function(err, data)
+netSuiteClient.update('Customer', '12345', fields, (err, data) =>
 {
     if (err)
     {
