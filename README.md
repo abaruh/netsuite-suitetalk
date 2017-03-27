@@ -9,18 +9,19 @@ Create a new instance of the client. Initializing the client is an asynchronous 
 ``` javascript
 'use strict';
 const netsuite       = require('netsuite-suitetalk');
-const netSuiteClient = new netsuite({
-    accountId : YOUR_ACCOUNT_ID,
-    appId     : YOUR_APPLICATION_ID,
-    baseUrl   : YOUR_BASE_URL,     // defaults to production NS - https://webservices.netsuite.com/services/NetSuitePort_2016_2
-    password  : YOUR_PASSWORD,
-    roleId    : YOUR_ROLE_ID,
-    username  : YOUR_USERNAME,
-    wsdlPath  : YOUR_WSDL_PATH    // defaults to wsdl (v2016_2) - https://webservices.netsuite.com/wsdl/v2016_2_0/netsuite.wsdl
+const netSuiteClient = new netsuite(
+{
+    accountId : YOURACCOUNTID,
+    appId     : YOURAPPLICATIONID,
+    baseUrl   : YOURBASEURL,     // defaults to production NS - https://webservices.netsuite.com/services/NetSuitePort_2016_2
+    password  : YOURPASSWORD,
+    roleId    : YOURROLEID,
+    username  : YOURUSERNAME,
+    wsdlPath  : YOURWSDLPATH    // defaults to wsdl (v2016_2) - https://webservices.netsuite.com/wsdl/v2016_2_0/netsuite.wsdl
 });
-netSuiteClient.initialize((err) => {
-    // handle error if needed
-    // netSuiteClient methods will now work
+netSuiteClient.initialize((err) =>
+{
+    // netSuiteClient methods are available
 });
 ```
 
