@@ -52,7 +52,7 @@ netSuiteClient.get('customer', '12345', (err, data) =>
 
 ###### Update Record
 
-Update any allowed NetSuite record by type, internalId, and fields.  Custom fields are updated via the CustomFieldValues property.  This is an asynchronous call requiring the use of a callback.
+Update any allowed NetSuite record by type, internalId, and fields.  Custom fields are updated via the CustomFieldValues property.  This is an asynchronous call requiring the use of a callback.  Currently this does not work with customFieldList.
 
 ```netSuiteClient.update(type, internalId, fields, callback);```
 

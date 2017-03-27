@@ -96,7 +96,7 @@ NetSuite.prototype.update = function(type, internalId, fields, callback)
         {
             for (let customFieldProperty in fields.customFieldList)
             {
-                wrappedData[':record'].attributes['listRel:' + property] = fields[property];
+                //wrappedData[':record'].attributes['listRel:' + property] = fields[property];
             }
         }
         else
