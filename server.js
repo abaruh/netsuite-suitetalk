@@ -95,7 +95,7 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
         }
     };
 
-    this.client.mapSso(wrappedData, callback);
+    this.client.mapSso('', callback);
 };
 
 NetSuite.prototype.update = function(type, internalId, fields, callback)
