@@ -82,8 +82,6 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
         {
             'attributes':
             {
-                'xmlns:listRel': 'urn:relationships_2016_2.lists.webservices.netsuite.com',
-                'xmlns:platformCore': 'urn:core_2016_2.platform.webservices.netsuite.com',
                 'xsi:type': 'platformCore:SsoCredentials',
                 'email': email,
                 'password': password,
@@ -95,7 +93,7 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
         }
     };
 
-    this.client.mapSso('', callback);
+    this.client.mapSso(wrappedData, callback);
 };
 
 NetSuite.prototype.update = function(type, internalId, fields, callback)
