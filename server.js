@@ -87,7 +87,7 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
                 'email': email,
                 'password': password,
                 'account': account,
-                //'role': role,
+                'role': {'attributes': '3'},
                 'authenticationToken': authenticationToken,
                 'partnerId': partnerId
             }
