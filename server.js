@@ -89,11 +89,8 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
                 'account': account,
                 'role':
                 {
-                    'attributes':
-                    {
-                        'xsi:type': 'platformCore:RecordRef',
-                        'internalId': role
-                    }
+                    'xsi:type': 'platformCore:RecordRef',
+                    'internalId': role
                 },
                 'authenticationToken': authenticationToken,
                 'partnerId': partnerId
