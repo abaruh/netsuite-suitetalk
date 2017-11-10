@@ -82,8 +82,6 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
         {
             'attributes':
             {
-                'xmlns:platformCore': 'urn:core_2016_2.platform.webservices.netsuite.com',
-                'xsi:type': 'platformCore:SsoCredentials',
                 'email': email,
                 'password': password,
                 'account': account,
