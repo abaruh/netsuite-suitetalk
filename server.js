@@ -1,6 +1,7 @@
 'use strict';
 
 const soap = require('soap');
+var async = require('async');
 
 class NetSuite
 {
@@ -79,9 +80,16 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
     // The mapSso operation seems to want to require a separate login before calling mapSso.  It does not like
     // the request-level credentials method and throws an Ambiguous Authentication error.  So do not initialize
     // before calling login.
-    login(this, function(client)
-    {
-        if (client)
+    async.waterfall(
+	[
+        function(next)
+	 	{
+            login(this, function(client)
+            {
+                next(null, client);
+            });
+        },
+        function(client, next)
         {
             let wrappedData =
             {
@@ -110,13 +118,17 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
 
             client.mapSso(wrappedData, function(mapSsoResponse)
             {
-                logout(client, function(logoutResponse)
-                {
-                    callback();
-                });
+                next(null, client);
+            });
+        },
+        function(client, next)
+        {
+            logout(client, function(logoutResponse)
+            {
+                callback();
             });
         }
-    });
+    ]
 };
 
 NetSuite.prototype.update = function(type, internalId, fields, callback)

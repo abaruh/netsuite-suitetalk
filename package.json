@@ -10,6 +10,7 @@
     "suitetalk"
   ],
   "dependencies": {
+    "async": "^2.6.0",
     "soap": "^0.19.0"
   },
   "repository": {
