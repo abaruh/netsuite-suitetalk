@@ -184,8 +184,10 @@ function login(settings, callback)
             }
         }
 
-        var loginResponse = client.login(passport);
-        callback(client, loginResponse);
+        client.login(passport, function(response)
+        {
+            callback(client, response);
+        });
     });
 };
 
