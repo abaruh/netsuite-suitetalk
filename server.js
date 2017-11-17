@@ -119,10 +119,10 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
 
             client.mapSso(wrappedData, function(err, response)
             {
-                next(null, response);
+                next(null, client, response);
             });
         },
-        function(mapSsoResponse, next)
+        function(client, mapSsoResponse, next)
         {
             client.logout(function()
             {
