@@ -81,6 +81,8 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
     // before calling login.
     login(this, function(client, loginResponse)
     {
+        console.log('loginResponse', loginResponse);
+
         let wrappedData =
         {
             ':ssoCredentials':
@@ -189,7 +191,8 @@ function login(settings, callback)
 
 function logout(client, callback)
 {
-    client.logout(callback);
+    client.logout();
+    callback();
 };
 
 module.exports = NetSuite;
