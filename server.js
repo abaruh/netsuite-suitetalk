@@ -172,14 +172,17 @@ function login(settings, callback)
 
         var passport =
         {
-            account: settings.accountId,
-            email: settings.username,
-            password: settings.password,
-            role:
+            passport:
             {
-                attributes:
+                account: settings.accountId,
+                email: settings.username,
+                password: settings.password,
+                role:
                 {
-                    internalId: settings.roleId
+                    attributes:
+                    {
+                        internalId: settings.roleId
+                    }
                 }
             }
         }
