@@ -29,10 +29,10 @@ NetSuite.prototype.initialize = function(callback)
 
         client.addSoapHeader(
         {
-            /*applicationInfo:
+            applicationInfo:
             {
                 applicationId: this.appId
-            },*/
+            },
             passport:
             {
                 account: this.accountId,
