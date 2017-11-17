@@ -124,7 +124,7 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
         },
         function(client, next)
         {
-            logout(client, function(logoutResponse)
+            logout(client, function()
             {
                 callback();
             });
