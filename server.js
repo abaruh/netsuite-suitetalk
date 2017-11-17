@@ -203,15 +203,19 @@ function login(settings, callback)
             }
         }
 
-        client.login(passport);
-        callback(client);
+        client.login(passport, function()
+        {
+            callback(client);
+        });
     });
 };
 
 function logout(client, callback)
 {
-    client.logout();
-    callback();
+    client.logout(function()
+    {
+        callback();
+    });
 };
 
 module.exports = NetSuite;
