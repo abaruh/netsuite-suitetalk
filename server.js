@@ -85,7 +85,7 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
 	[
         function(next)
 	 	{
-            login(self, function(client)
+            login(self, function(err, client)
             {
                 next(null, client);
             });
@@ -117,15 +117,14 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
                 }
             };
 
-            client.mapSso(wrappedData, function(mapSsoResponse, mapSsoResponse2)
+            client.mapSso(wrappedData, function(err, response)
             {
-                console.log('mapSsoResponse', mapSsoResponse2);
-                next(null, mapSsoResponse2);
+                next(null, response);
             });
         },
         function(mapSsoResponse, next)
         {
-            logout(self, function()
+            client.logout(function()
             {
                 callback(mapSsoResponse);
             });
@@ -204,49 +203,9 @@ function login(settings, callback)
             }
         }
 
-        client.login(passport, function()
+        client.login(passport, function(err, response)
         {
-            callback(client);
-        });
-    });
-};
-
-function logout(settings, callback)
-{
-    soap.createClient(settings.wsdlPath, {}, (err, client) =>
-    {
-        if (err)
-        {
-            console.log('Error: ' + err);
-            return;
-        }
-
-        client.addSoapHeader(
-        {
-            applicationInfo:
-            {
-                applicationId: settings.appId
-            },
-            passport:
-            {
-                account: settings.accountId,
-                email: settings.username,
-                password: settings.password,
-                role:
-                {
-                    attributes:
-                    {
-                        internalId: settings.roleId
-                    }
-                }
-            }
-        });
-
-        client.setEndpoint(settings.baseUrl);
-
-        client.logout(function()
-        {
-            callback();
+            callback(err, client);
         });
     });
 };
