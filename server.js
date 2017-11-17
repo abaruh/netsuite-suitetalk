@@ -128,7 +128,7 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
                 callback();
             });
         }
-    ]
+    ]);
 };
 
 NetSuite.prototype.update = function(type, internalId, fields, callback)
