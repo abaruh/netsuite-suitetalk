@@ -119,6 +119,7 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
 
             client.mapSso(wrappedData, function(mapSsoResponse)
             {
+                console.log('mapSsoResponse', mapSsoResponse);
                 next(null, mapSsoResponse);
             });
         },
@@ -225,27 +226,23 @@ function logout(settings, callback)
             applicationInfo:
             {
                 applicationId: settings.appId
-            }
-        });
-
-        client.setEndpoint(settings.baseUrl);
-
-        var passport =
-        {
+            },
             passport:
             {
-                account: settings.accountId,
-                email: settings.username,
-                password: settings.password,
+                account: this.accountId,
+                email: this.username,
+                password: this.password,
                 role:
                 {
                     attributes:
                     {
-                        internalId: settings.roleId
+                        internalId: this.roleId
                     }
                 }
             }
-        }
+        });
+
+        client.setEndpoint(settings.baseUrl);
 
         client.logout(function()
         {
