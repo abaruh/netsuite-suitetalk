@@ -79,40 +79,47 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
     // The mapSso operation seems to want to require a separate login before calling mapSso.  It does not like
     // the request-level credentials method and throws an Ambiguous Authentication error.  So do not initialize
     // before calling login.
-    login(this, function(client, loginResponse)
+    login(this, function(loginResponse)
     {
         console.log('loginResponse', loginResponse);
 
-        let wrappedData =
+        if (loginResponse.client)
         {
-            ':ssoCredentials':
+            var client = loginResponse.client;
+
+            let wrappedData =
             {
-                'attributes':
-                {
-                    'xmlns:platformCore': 'urn:core_2016_2.platform.webservices.netsuite.com',
-                    'xsi:type': 'platformCore:SsoCredentials'
-                },
-                'email': email,
-                'password': password,
-                'account': account,
-                'role':
+                ':ssoCredentials':
                 {
                     'attributes':
                     {
-                        'xsi:type': 'platformCore:RecordRef',
-                        'internalId': role
-                    }
-                },
-                'authenticationToken': authenticationToken,
-                'partnerId': partnerId
-            }
-        };
+                        'xmlns:platformCore': 'urn:core_2016_2.platform.webservices.netsuite.com',
+                        'xsi:type': 'platformCore:SsoCredentials'
+                    },
+                    'email': email,
+                    'password': password,
+                    'account': account,
+                    'role':
+                    {
+                        'attributes':
+                        {
+                            'xsi:type': 'platformCore:RecordRef',
+                            'internalId': role
+                        }
+                    },
+                    'authenticationToken': authenticationToken,
+                    'partnerId': partnerId
+                }
+            };
 
-        client.mapSso(wrappedData, function(mapSsoResponse)
-        {
-            logout();
-            callback();
-        });
+            client.mapSso(wrappedData, function(mapSsoResponse)
+            {
+                logout(client, function(logoutResponse)
+                {
+                    callback();
+                });
+            });
+        }
     });
 };
 
@@ -189,7 +196,7 @@ function login(settings, callback)
 
         client.login(passport, function(response)
         {
-            callback(client, response);
+            callback({loginResponse: response, client: client});
         });
     });
 };
