@@ -119,12 +119,12 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
 
             client.mapSso(wrappedData, function(mapSsoResponse)
             {
-                next(null, client);
+                next();
             });
         },
-        function(client, next)
+        function(next)
         {
-            logout(client, function()
+            logout(self, function()
             {
                 callback();
             });
@@ -210,11 +210,47 @@ function login(settings, callback)
     });
 };
 
-function logout(client, callback)
+function logout(settings, callback)
 {
-    client.logout(function()
+    soap.createClient(settings.wsdlPath, {}, (err, client) =>
     {
-        callback();
+        if (err)
+        {
+            console.log('Error: ' + err);
+            return;
+        }
+
+        client.addSoapHeader(
+        {
+            applicationInfo:
+            {
+                applicationId: settings.appId
+            }
+        });
+
+        client.setEndpoint(settings.baseUrl);
+
+        var passport =
+        {
+            passport:
+            {
+                account: settings.accountId,
+                email: settings.username,
+                password: settings.password,
+                role:
+                {
+                    attributes:
+                    {
+                        internalId: settings.roleId
+                    }
+                }
+            }
+        }
+
+        client.logout(function()
+        {
+            callback();
+        });
     });
 };
 
