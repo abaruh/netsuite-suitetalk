@@ -76,32 +76,42 @@ NetSuite.prototype.get = function(type, internalId, callback)
 
 NetSuite.prototype.mapSso = function(email, password, account, role, authenticationToken, partnerId, callback)
 {
-    let wrappedData =
+    // The mapSso operation seems to want to require a separate login before calling mapSso.  It does not like
+    // the request-level credentials method and throws an Ambiguous Authentication error.  So do not initialize
+    // before calling login.
+    login(function(client, loginResponse)
     {
-        ':ssoCredentials':
+        let wrappedData =
         {
-            'attributes':
-            {
-                'xmlns:platformCore': 'urn:core_2016_2.platform.webservices.netsuite.com',
-                'xsi:type': 'platformCore:SsoCredentials'
-            },
-            'email': email,
-            'password': password,
-            'account': account,
-            'role':
+            ':ssoCredentials':
             {
                 'attributes':
                 {
-                    'xsi:type': 'platformCore:RecordRef',
-                    'internalId': role
-                }
-            },
-            'authenticationToken': authenticationToken,
-            'partnerId': partnerId
-        }
-    };
+                    'xmlns:platformCore': 'urn:core_2016_2.platform.webservices.netsuite.com',
+                    'xsi:type': 'platformCore:SsoCredentials'
+                },
+                'email': email,
+                'password': password,
+                'account': account,
+                'role':
+                {
+                    'attributes':
+                    {
+                        'xsi:type': 'platformCore:RecordRef',
+                        'internalId': role
+                    }
+                },
+                'authenticationToken': authenticationToken,
+                'partnerId': partnerId
+            }
+        };
 
-    this.client.mapSso(wrappedData, callback);
+        client.mapSso(wrappedData, function(mapSsoResponse)
+        {
+            logout();
+            callback();
+        });
+    });
 };
 
 NetSuite.prototype.update = function(type, internalId, fields, callback)
@@ -136,6 +146,50 @@ NetSuite.prototype.update = function(type, internalId, fields, callback)
     }
 
     this.client.update(wrappedData, callback);
+};
+
+function login(callback)
+{
+    soap.createClient(this.wsdlPath, {}, (err, client) =>
+    {
+        if (err)
+        {
+            console.log('Error: ' + err);
+            return;
+        }
+
+        client.addSoapHeader(
+        {
+            applicationInfo:
+            {
+                applicationId: this.appId
+            }
+        });
+
+        client.setEndpoint(this.baseUrl);
+
+        var passport =
+        {
+            account: this.accountId,
+            email: this.username,
+            password: this.password,
+            role:
+            {
+                attributes:
+                {
+                    internalId: this.roleId
+                }
+            }
+        }
+
+        var loginResponse = client.login(passport);
+        callback(client, loginResponse);
+    });
+};
+
+function logout(client, callback)
+{
+    client.logout(callback);
 };
 
 module.exports = NetSuite;
