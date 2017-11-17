@@ -117,10 +117,10 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
                 }
             };
 
-            client.mapSso(wrappedData, function(mapSsoResponse)
+            client.mapSso(wrappedData, function(mapSsoResponse, mapSsoResponse2)
             {
-                console.log('mapSsoResponse', mapSsoResponse);
-                next(null, mapSsoResponse);
+                console.log('mapSsoResponse', mapSsoResponse2);
+                next(null, mapSsoResponse2);
             });
         },
         function(mapSsoResponse, next)
@@ -229,14 +229,14 @@ function logout(settings, callback)
             },
             passport:
             {
-                account: this.accountId,
-                email: this.username,
-                password: this.password,
+                account: settings.accountId,
+                email: settings.username,
+                password: settings.password,
                 role:
                 {
                     attributes:
                     {
-                        internalId: this.roleId
+                        internalId: settings.roleId
                     }
                 }
             }
