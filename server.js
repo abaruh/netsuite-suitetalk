@@ -74,7 +74,7 @@ NetSuite.prototype.get = function(type, internalId, callback)
     this.client.get(wrappedData, callback);
 };
 
-NetSuite.prototype.mapSso = function(email, password, account, role, authenticationToken, partnerId, callback)
+NetSuite.prototype.mapSso = function(this, mail, password, account, role, authenticationToken, partnerId, callback)
 {
     // The mapSso operation seems to want to require a separate login before calling mapSso.  It does not like
     // the request-level credentials method and throws an Ambiguous Authentication error.  So do not initialize
@@ -148,9 +148,9 @@ NetSuite.prototype.update = function(type, internalId, fields, callback)
     this.client.update(wrappedData, callback);
 };
 
-function login(callback)
+function login(settings, callback)
 {
-    soap.createClient(this.wsdlPath, {}, (err, client) =>
+    soap.createClient(settings.wsdlPath, {}, (err, client) =>
     {
         if (err)
         {
@@ -162,22 +162,22 @@ function login(callback)
         {
             applicationInfo:
             {
-                applicationId: this.appId
+                applicationId: settings.appId
             }
         });
 
-        client.setEndpoint(this.baseUrl);
+        client.setEndpoint(settings.baseUrl);
 
         var passport =
         {
-            account: this.accountId,
-            email: this.username,
-            password: this.password,
+            account: settings.accountId,
+            email: settings.username,
+            password: settings.password,
             role:
             {
                 attributes:
                 {
-                    internalId: this.roleId
+                    internalId: settings.roleId
                 }
             }
         }
