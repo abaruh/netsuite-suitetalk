@@ -80,11 +80,12 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
     // The mapSso operation seems to want to require a separate login before calling mapSso.  It does not like
     // the request-level credentials method and throws an Ambiguous Authentication error.  So do not initialize
     // before calling login.
+    var self = this;
     async.waterfall(
 	[
         function(next)
 	 	{
-            login(this, function(client)
+            login(self, function(client)
             {
                 next(null, client);
             });
