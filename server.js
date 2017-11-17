@@ -79,14 +79,10 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
     // The mapSso operation seems to want to require a separate login before calling mapSso.  It does not like
     // the request-level credentials method and throws an Ambiguous Authentication error.  So do not initialize
     // before calling login.
-    login(this, function(loginResponse)
+    login(this, function(client)
     {
-        console.log('loginResponse', loginResponse);
-
-        if (loginResponse.client)
+        if (client)
         {
-            var client = loginResponse.client;
-
             let wrappedData =
             {
                 ':ssoCredentials':
@@ -194,10 +190,8 @@ function login(settings, callback)
             }
         }
 
-        client.login(passport, function(response)
-        {
-            callback({loginResponse: response, client: client});
-        });
+        client.login(passport);
+        callback(client);
     });
 };
 
