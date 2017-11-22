@@ -117,9 +117,16 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
                 }
             };
 
-            client.mapSso(wrappedData, function(err, response)
+            client.mapSso(wrappedData, function(err, mapSsoResponse)
             {
-                next(null, client, response);
+                if (err)
+                {
+                    callback({error: err});
+                }
+                else
+                {
+                    next(null, client, mapSsoResponse);
+                }
             });
         },
         function(client, mapSsoResponse, next)
