@@ -15,6 +15,8 @@ class NetSuite
         this.roleId = options.roleId;
         this.username = options.username;
         this.wsdlPath = options.wsdlPath || 'https://webservices.netsuite.com/wsdl/v2016_2_0/netsuite.wsdl';
+        this.nsTarget = options.nstarget || '2016_2';
+        this.nsEnvironment = options.nsenvironment || 'production';
     }
 }
 
@@ -92,13 +94,19 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
         },
         function(client, next)
         {
+            let nsEnvironment = '';
+            if (self.nsEnvironment !== 'production')
+            {
+                nsEnvironment = 'sandbox.';
+            }
+
             let wrappedData =
             {
                 ':ssoCredentials':
                 {
                     'attributes':
                     {
-                        'xmlns:platformCore': 'urn:core_2016_2.platform.webservices.netsuite.com',
+                        'xmlns:platformCore': 'urn:core_' + self.nsTarget + '.platform.webservices.' + nsEnvironment + 'netsuite.com',
                         'xsi:type': 'platformCore:SsoCredentials'
                     },
                     'email': email,
