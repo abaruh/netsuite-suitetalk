@@ -3,6 +3,18 @@
 const soap = require('soap');
 var async = require('async');
 
+/*
+    To update:
+    git add -A
+    git commit -m ""
+    git push origin master
+    npm version patch
+    npm publish
+
+    On client side
+    npm update
+*/
+
 class NetSuite
 {
     constructor(options)
