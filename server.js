@@ -28,7 +28,7 @@ class NetSuite
         this.username = options.username;
         this.wsdlPath = options.wsdlPath || 'https://webservices.netsuite.com/wsdl/v2016_2_0/netsuite.wsdl';
         this.nsTarget = options.nstarget || '2016_2';
-        this.nsEnvironment = options.nsenvironment || 'production';
+        this.nsEnvironment = 'production'; //options.nsenvironment || 'production'; // This is not totally working well so just assume prod
     }
 }
 
@@ -71,14 +71,15 @@ NetSuite.prototype.initialize = function(callback)
 
 NetSuite.prototype.get = function(type, internalId, callback)
 {
+    var self = this;
     let wrappedData =
     {
         ':record':
         {
             'attributes':
             {
-                'xmlns:listRel': 'urn:relationships_2016_2.lists.webservices.netsuite.com',
-                'xmlns:platformCore': 'urn:core_2016_2.platform.webservices.netsuite.com',
+                'xmlns:listRel': 'urn:relationships_' + self.nsTarget + '.lists.webservices.netsuite.com',
+                'xmlns:platformCore': 'urn:core_' + self.nsTarget + '.platform.webservices.netsuite.com',
                 'xsi:type': 'platformCore:RecordRef',
                 'type': type,
                 'internalId': internalId
@@ -163,14 +164,15 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
 
 NetSuite.prototype.update = function(type, internalId, fields, callback)
 {
+    var self = this;
     let wrappedData =
     {
         ':record':
         {
             'attributes':
             {
-                'xmlns:listRel': 'urn:relationships_2016_2.lists.webservices.netsuite.com',
-                'xmlns:platformCore': 'urn:core_2016_2.platform.webservices.netsuite.com',
+                'xmlns:listRel': 'urn:relationships_' + self.nsTarget + '.lists.webservices.netsuite.com',
+                'xmlns:platformCore': 'urn:core_' + self.nsTarget + '.platform.webservices.netsuite.com',
                 'xsi:type': 'listRel:' + type,
                 'internalId': internalId
             }
