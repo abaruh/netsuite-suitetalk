@@ -138,8 +138,6 @@ NetSuite.prototype.mapSso = function(email, password, account, role, authenticat
                 }
             };
 
-            console.log(wrappedData);
-
             client.mapSso(wrappedData, function(err, mapSsoResponse)
             {
                 if (err)
